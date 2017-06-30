@@ -2,6 +2,7 @@
 
 use Closure;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class LumenCors {
 
@@ -18,7 +19,11 @@ class LumenCors {
                                     $req->header("Origin")
                                     );
         }
-        $rsp->header('Access-Control-Allow-Origin', $origin);
+        if($rsp instanceof SymfonyResponse) {
+            $rsp->headers->set('Access-Control-Allow-Origin', $origin);
+        }  else {
+            $rsp->header('Access-Control-Allow-Origin', $origin);
+        }
     }
 
     protected function setExposeHeaders($req, $rsp) {
